@@ -1,0 +1,29 @@
+Merch(_MerchID_, Cost, Inventory)
+PK MerchID
+
+
+TShirt(_MerchID_, StyleID, SizeCode) *Instance of tshirtstyle*
+PK, FK MerchID -> Merch
+FK StyleID -> TShirtStyles
+FK SizeCode -> TShirtSize
+
+TShirtStyle(_StyleID_, Description, Color)
+
+TShirtSize(_SizeCode_, Size)
+
+
+Album(_MerchID_, Title, FormatCode)
+PK, FK MerchID -> Merch
+FK FormatCode -> Format
+
+Format(_FormatCode_, Format)
+PK FormatCode
+
+
+Event(_EventID_, VenueName, City, State, Country, Date)
+PK EventID
+
+
+MerchSold(_MerchID_, EventID, ItemsSold)
+PK, FK MerchID -> Merch
+PK, FK EventID -> Event
