@@ -1,29 +1,32 @@
-Merch(_MerchID_, Cost, Inventory)
+Merch(MerchID, Cost, Inventory)
 PK MerchID
 
 
-TShirt(_MerchID_, StyleID, SizeCode) *Instance of tshirtstyle*
-PK, FK MerchID -> Merch
+TShirt(MerchID, StyleID, SizeCode) *Instance of tshirtstyle*
+PK MerchID
+FK MerchID -> Merch
 FK StyleID -> TShirtStyles
 FK SizeCode -> TShirtSize
 
-TShirtStyle(_StyleID_, Description, Color)
+TShirtStyle(StyleID, Description, Color)
 
-TShirtSize(_SizeCode_, Size)
+TShirtSize(SizeCode, Size)
 
 
-Album(_MerchID_, Title, FormatCode)
-PK, FK MerchID -> Merch
+Album(MerchID, Title, FormatCode)
+PK MerchID
+FK MerchID -> Merch
 FK FormatCode -> Format
 
-Format(_FormatCode_, Format)
+Format(FormatCode, Format)
 PK FormatCode
 
 
-Event(_EventID_, VenueName, City, State, Country, Date)
+Event(EventID, VenueName, City, State, Country, Date)
 PK EventID
 
 
-MerchSold(_MerchID_, EventID, ItemsSold)
-PK, FK MerchID -> Merch
-PK, FK EventID -> Event
+MerchSold(MerchID, EventID, ItemsSold)
+PK MerchID, EventID
+FK MerchID -> Merch
+FK EventID -> Event

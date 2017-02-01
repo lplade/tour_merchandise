@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-from flask import Flask
+
+# note that the Flask imports are in orm.py
+from model.orm import *
+
 app = Flask(__name__)
 
 
