@@ -17,8 +17,8 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 @app.route('/')
 def index():
-    all_merch = db.query.queryall(Merch)
-    return render_template("main.html", all_merch)
+    all_merch = Merch.query.all()
+    return render_template("main.html", all_merch=all_merch)
 
 
 if __name__ == '__main__':
