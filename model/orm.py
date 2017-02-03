@@ -14,7 +14,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 db = SQLAlchemy(app)
 
 
-# Parent class to TShirt,
+# Parent class to TShirt, Album. This corresponds to a SKU.
 class Merch(db.Model):
     merch_id = db.Column(db.Integer, primary_key=True)
     cost = db.Column(db.Float)

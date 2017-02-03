@@ -15,12 +15,37 @@ print(template_dir)
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 
-@app.route('/')
+"""
+ROUTES
+"""
+
+
+@app.route("/")
 def index():
     all_merch = Merch.query.all()
     return render_template("main.html", all_merch=all_merch)
 
 
-if __name__ == '__main__':
+@app.route("/tshirts")
+def tshirt_list():
+    all_tshirts = TShirt.query.all()
+    return render_template("tshirts.html", all_tshirts=all_tshirts)
+
+
+@app.route("/albums")
+def album_list():
+    all_albums = Album.query.all()
+    return render_template("albums.html", all_albums=all_albums)
+
+
+@app.route("/maintenance")
+def db_maintenance():
+    all_sizes = TShirtSize.query.all()
+    all_formats = Format.query.all()
+    return render_template("maintenance.html",
+                           all_sizes=all_sizes,
+                           all_formats=all_formats)
+
+if __name__ == "__main__":
     app.run()
 

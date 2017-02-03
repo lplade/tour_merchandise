@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Tour Merchandise - maintenance{% endblock %}
+{% block content %}
+    <h1>Database maintenance</h1>
+    <div class="row">
+        <div class="col-md-6"> <!-- TShirt sizes appear here -->
+            <h2>T-shirt sizes</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+
+                    <tr>
+                        <th>Table header here</th> <!-- Can we query model for field names? -->
+                    </tr>
+                    {% for size in all_sizes %}
+                        <tr>
+                            <td>{{ size }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td>No entries yet</td></tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <!-- TODO add a tshirt size form -->
+        </div>
+        <div class="col-md-6"> <!-- Recording formats appear here -->
+            <h2>Record formats</h2>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <th>Table header here</th>
+                    </tr>
+                    {%  for format in all_formats %}
+                        <tr>
+                            <td>{{ format }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td>No entries yet</td></tr>
+                    {% endor %}
+                </table>
+            </div>
+            <!-- TODO add a media format form -->
+        </div>
+     </div>
+{% endblock %}
