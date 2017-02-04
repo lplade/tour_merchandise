@@ -17,6 +17,8 @@ db = SQLAlchemy(app)
 # Parent class to TShirt, Album. This corresponds to a SKU.
 class Merch(db.Model):
     merch_id = db.Column(db.Integer, primary_key=True)
+    sku = db.Column(db.String(32))  # autogenerate from controller
+    description = db.Column(db.String(64))  # autogenerate from controller
     cost = db.Column(db.Float)
     inventory = db.Column(db.Integer)
     type = db.Column(db.String(12))
@@ -113,6 +115,18 @@ class TShirtSize(db.Model):
     def __repr__(self):
         return self.size
 
+    @staticmethod
+    def populate_default():
+        """
+        Use to put some standard options in a new db
+        :return:
+        """
+        _sizes = ["S", "M", "L", "XL", "XXL", "XXL"]
+        for s in _sizes:
+            new_size = TShirtSize(s)
+            db.session.add(new_size)
+        db.session.commit()
+
 
 # table to map album format name
 class Format(db.Model):
@@ -124,6 +138,18 @@ class Format(db.Model):
 
     def __repr__(self):
         return self.media_format
+
+    @staticmethod
+    def populate_default():
+        """
+        Use to put some standard options in a new db
+        :return:
+        """
+        _formats = ["CD", "vinyl"]
+        for f in _formats:
+            new_format = Format(f)
+            db.session.add(new_format)
+        db.session.commit()
 
 
 # list of events with opportunities to sell merch

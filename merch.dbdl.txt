@@ -1,25 +1,20 @@
-Merch(MerchID, Cost, Inventory)
+Merch(MerchID, SKU, Description, Cost, Inventory, type)
 PK MerchID
 
 
-TShirt(MerchID, StyleID, SizeCode) *Instance of tshirtstyle*
-PK MerchID
-FK MerchID -> Merch
-FK StyleID -> TShirtStyles
-FK SizeCode -> TShirtSize
-
-TShirtStyle(StyleID, Description, Color)
-
-TShirtSize(SizeCode, Size)
-
-
-Album(MerchID, Title, FormatCode)
+TShirt(MerchID, Style, Color, Size)
 PK MerchID
 FK MerchID -> Merch
-FK FormatCode -> Format
 
-Format(FormatCode, Format)
-PK FormatCode
+
+Better DB design would store Style, Color, and Size strings in own tables.
+
+
+Album(MerchID, Title, Format)
+PK MerchID
+FK MerchID -> Merch
+
+Better DB design would store Format in its own table.
 
 
 Event(EventID, VenueName, City, State, Country, Date)

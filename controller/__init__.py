@@ -28,6 +28,8 @@ def index():
 
 @app.route("/tshirts")
 def tshirt_list():
+    all_styles = TShirtStyle.query.all()
+    all_sizes = TShirtSize.query.all()
     all_tshirts = TShirt.query.all()
     return render_template("tshirts.html", all_tshirts=all_tshirts)
 
@@ -36,6 +38,14 @@ def tshirt_list():
 def album_list():
     all_albums = Album.query.all()
     return render_template("albums.html", all_albums=all_albums)
+
+
+@app.route("/addnew")
+def add_new_merch():
+    # Need all the support tables for
+    all_styles = TShirtStyle.query.all()
+    all_sizes = TShirtSize.query.all()
+    all_formats = Format.query.all()
 
 
 @app.route("/maintenance")
