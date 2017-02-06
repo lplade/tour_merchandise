@@ -10,7 +10,7 @@ view_dir = os.path.join(base_dir, "view")  # ../view
 template_dir = os.path.join(view_dir, "templates")  # ../view/templates
 static_dir = os.path.join(view_dir, "static")  # ../view/static
 
-print(template_dir)
+# print(template_dir)
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
@@ -28,8 +28,6 @@ def index():
 
 @app.route("/tshirts")
 def tshirt_list():
-    all_styles = TShirtStyle.query.all()
-    all_sizes = TShirtSize.query.all()
     all_tshirts = TShirt.query.all()
     return render_template("tshirts.html", all_tshirts=all_tshirts)
 
@@ -42,19 +40,8 @@ def album_list():
 
 @app.route("/addnew")
 def add_new_merch():
-    # Need all the support tables for
-    all_styles = TShirtStyle.query.all()
-    all_sizes = TShirtSize.query.all()
-    all_formats = Format.query.all()
+    pass
 
-
-@app.route("/maintenance")
-def db_maintenance():
-    all_sizes = TShirtSize.query.all()
-    all_formats = Format.query.all()
-    return render_template("maintenance.html",
-                           all_sizes=all_sizes,
-                           all_formats=all_formats)
 
 if __name__ == "__main__":
     app.run()

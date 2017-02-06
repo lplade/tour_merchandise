@@ -36,35 +36,26 @@ class Merch(db.Model):
         self.cost = cost
         self.inventory = inventory
 
-    def __repr__(self):
-        # we shouldn't ever really use the repr of this superclass
-        return "ID %3d:  Cost: $%5.2f Inv: %4d" % format(
-            self.merch_id, self.cost, self.inventory
-        )
-
 
 # subclass of Merch
 class TShirt(Merch):
     __mapper_args__ = {
         "polymorphic_identity": "t_shirt"
     }
+
+    sizes = ["S", "M", "L", "XL", "XXL", "XXL"]
+
     merch_id = db.Column(db.Integer,
                          db.ForeignKey("merch.merch_id"),
                          primary_key=True)
-    style_id = db.Column(db.Integer, db.ForeignKey("t_shirt_style.style_id"))
     size_code = db.Column(db.Integer)
+    style = db.Column(db.String(64))
+    size = db.Column(db.String(3))
 
-    def __init__(self, cost, inventory, style_id, size_code):
+    def __init__(self, cost, inventory, style, size):
         super().__init__(cost, inventory)
-        self.style_id = style_id
-        self.size_code = size_code
-
-    def __repr__(self):
-        return "ID %3d:  Cost: $%5.2f  Inv: %4d  Style: %r  Size: %r" % format(
-            self.merch_id, self.cost, self.inventory,
-            self.style_id, self.size_code
-            # TODO lookup and display correct strings
-        )
+        self.style_id = style
+        self.size_code = size  # TODO integrity constraint
 
 
 # subclass of Merch
@@ -72,84 +63,19 @@ class Album(Merch):
     __mapper_args__ = {
         "polymorphic_identity": "album"
     }
+
+    formats = ["CD", "vinyl"]
+
     merch_id = db.Column(db.Integer,
                          db.ForeignKey("merch.merch_id"),
                          primary_key=True)
     title = db.Column(db.String(80))
-    format_code = db.Column(db.Integer, db.ForeignKey("format.format_code"))
+    rec_format = db.Column(db.String(5))
 
-    def __init__(self, cost, inventory, title, formot_code):
+    def __init__(self, cost, inventory, title, rec_format):
         super().__init__(cost, inventory)
         self.title = title
-        self.format_code = formot_code
-
-    def __repr__(self):
-        return "ID %3d:  Cost: $%5.2f  Inv: %4d  Title: %r  Format: %r" % \
-                format(
-                    self.merch_id, self.cost, self.inventory,
-                    self.title, self.format_code
-                    # TODO lookup and display correct strings
-                )
-
-
-# table to map t-shirt style name
-class TShirtStyle(db.Model):
-    style_id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(80))
-
-    def __init__(self, description):
-        self.description = description
-
-    def __repr__(self):
-        return self.description
-
-
-# table to map t-shirt size name
-class TShirtSize(db.Model):
-    size_id = db.Column(db.Integer, primary_key=True)
-    size = db.Column(db.String(4))
-
-    def __init__(self, size):
-        self.size = size
-
-    def __repr__(self):
-        return self.size
-
-    @staticmethod
-    def populate_default():
-        """
-        Use to put some standard options in a new db
-        :return:
-        """
-        _sizes = ["S", "M", "L", "XL", "XXL", "XXL"]
-        for s in _sizes:
-            new_size = TShirtSize(s)
-            db.session.add(new_size)
-        db.session.commit()
-
-
-# table to map album format name
-class Format(db.Model):
-    format_code = db.Column(db.Integer, primary_key=True)
-    media_format = db.Column(db.String(5))  # "Vinyl" or "CD"
-
-    def __init__(self, media_format):
-        self.media_format = media_format
-
-    def __repr__(self):
-        return self.media_format
-
-    @staticmethod
-    def populate_default():
-        """
-        Use to put some standard options in a new db
-        :return:
-        """
-        _formats = ["CD", "vinyl"]
-        for f in _formats:
-            new_format = Format(f)
-            db.session.add(new_format)
-        db.session.commit()
+        self.rec_format = rec_format  # TODO integrity constraint
 
 
 # list of events with opportunities to sell merch

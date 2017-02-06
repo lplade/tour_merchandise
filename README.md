@@ -1,3 +1,9 @@
+Create the database with
+~~~~
+from model.orm import db
+db.create_all()
+~~~~
+
 
 Flask
 http://flask.pocoo.org/docs/0.12/
