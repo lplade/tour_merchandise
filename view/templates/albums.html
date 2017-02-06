@@ -3,14 +3,25 @@
 {% block content %}
     <h1>Tour Merchandise</h1>
     <div class="table-responsive">
+        <h2>Albums</h2>
         <table class="table table-striped">
-
             <tr>
-                <th>Table header here</th> <!-- Can we query model for field names? -->
+                <th>SKU</th> <!-- Can we query model for field names? -->
+                <th>Description</th>
+                <th>Cost</th>
+                <th># in stock</th>
+                <th>Title</th>
+                <th>Format</th>
+
             </tr>
             {% for album in all_albums %}
                 <tr>
-                    <td>{{ album }}</td>
+                    <td>{{ tshirt.sku }}</td>
+                    <td>{{ tshirt.description }}</td>
+                    <td>{{ tshirt.cost }}</td>
+                    <td>{{ tshirt.inventory }}</td>
+                    <td>{{ tshirt.title }}</td>
+                    <td>{{ tshirt.rec_format }}</td>
                 </tr>
             {% else %}
                 <tr><td>No entries</td></tr>

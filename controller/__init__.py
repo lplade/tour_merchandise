@@ -29,7 +29,8 @@ def index():
 @app.route("/tshirts")
 def tshirt_list():
     all_tshirts = TShirt.query.all()
-    return render_template("tshirts.html", all_tshirts=all_tshirts)
+    sizes = TShirt.sizes
+    return render_template("tshirts.html", all_tshirts=all_tshirts, sizes=sizes)
 
 
 @app.route("/albums")
@@ -42,6 +43,11 @@ def album_list():
 def add_new_merch():
     pass
 
+
+@app.route("/events")
+def event_list():
+    all_events = Event.query.all()
+    return render_template("events.html", all_events=all_events)
 
 if __name__ == "__main__":
     app.run()

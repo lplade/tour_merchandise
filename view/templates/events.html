@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Tour Merchandise{% endblock %}
+{% block content %}
+    <h1>Tour Merchandise</h1>
+    <div class="table-responsive">
+        <h2>Events</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>ID#</th> <!-- Can we query model for field names? -->
+                <th>Venue</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Country</th>
+                <th>Date</th>
+
+            </tr>
+            {% for event in all_events %}
+                <tr>
+                    <td>{{ event.event_id }}</td>
+                    <td>{{ event.venue_name }}</td>
+                    <td>{{ event.city }}</td>
+                    <td>{{ event.state }}</td>
+                    <td>{{ event.country }}</td>
+                    <td>{{ event.date }}</td>
+
+                </tr>
+            {% else %}
+                <tr><td>No entries</td></tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
