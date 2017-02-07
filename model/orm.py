@@ -81,6 +81,9 @@ class Album(Merch):
         self.title = title
         self.rec_format = rec_format  # TODO integrity constraint
 
+    def generate_description(self):
+        return "{}, on {}".format(self.title, self.rec_format)
+
 
 # list of events with opportunities to sell merch
 class Event(db.Model):

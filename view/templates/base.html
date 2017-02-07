@@ -27,6 +27,9 @@
     {% if error %}
         <div class="bg-danger">{{ error }}</div>
     {% endif %}
+    {% if info %}
+        <div class="bg-info">{{ info }}</div>
+    {% endif %}
     {% block content %}{% endblock %}
 
 </div>

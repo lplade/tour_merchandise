@@ -7,6 +7,7 @@
             <table class="table table-striped">
                 <tr>
                     <th>ID#</th> <!-- Can we query model for field names? -->
+                    <th>Description</th>
                     <th>Cost</th>
                     <th># in stock</th>
                     <th>type</th> <!-- TODO hide this when things work -->
@@ -14,6 +15,7 @@
                 {% for item in all_merch %}
                     <tr>
                         <td>{{ item.merch_id }}</td>
+                        <td>{{ item.description }}</td>
                         <td>{{ "$%5.2f"|format(item.cost) }}</td>
                         <td>{{ item.inventory }}</td>
                         <td>{{ item.type }}</td>

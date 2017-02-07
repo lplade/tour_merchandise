@@ -28,6 +28,10 @@ def index():
 
 @app.route("/tshirts", methods=["POST", "GET"])
 def tshirt_list():
+    """
+    Renders a list of all TShirts, and allows submission of new TShirt by form
+    :return:
+    """
     error = None
     if request.method == "POST":
         try:
@@ -38,6 +42,7 @@ def tshirt_list():
             t_shirt.description = t_shirt.generate_description()
             db.session.add(t_shirt)
             db.session.commit()
+            # TODO figure out flash
             # flash("New t-shirt SKU was added successfully")
         except KeyError:
             error = "Key error! " + str(request)
@@ -51,13 +56,76 @@ def tshirt_list():
                            error=error)
 
 
-@app.route("/albums")
+@app.route("/albums", methods=["POST", "GET"])
 def album_list():
+    """
+    Renders a list of all Albums, and allows submission of new Album by form
+    :return:
+    """
+    error = None
+    if request.method == "POST":
+        try:
+            album = Album(cost=float(request.form["price"]),
+                          inventory=int(request.form["inventory"]),
+                          title=request.form("title"),
+                          rec_format=request.form("format"))
+            album.description = album.generate_description()
+            db.session.add(album)
+            db.session.commit()
+        except KeyError:
+            error = "Key error! " + str(request)
+
     all_albums = Album.query.all()
-    return render_template("albums.html", all_albums=all_albums)
+    formats = Album.formats
+
+    return render_template("albums.html",
+                           all_albums=all_albums,
+                           formats=formats,
+                           error=error)
 
 # pretty useful:
 # https://techarena51.com/index.php/flask-sqlalchemy-tutorial/
+
+
+@app.route("/tshirt/<int:merch_id>", methods=["POST", "GET"])
+def tshirt_properties(merch_id):
+    """
+    Display properties for a single t-shirt.
+    Allows us to update or delete record.
+    :param merch_id:
+    :return:
+    """
+
+    # Would prefer to use HTTP PUT. This appears to be not straightforward.
+
+    error = None
+    info = None
+
+    tshirt = TShirt.query.get(merch_id)
+    if tshirt is None:
+        return render_template("notfound.html",
+                               merch_id=merch_id)
+    elif request.method == "POST":
+        try:
+            # Update the stored object with new values from form
+            tshirt.cost = float(request.form["price"])
+            tshirt.inventory = int(request.form["inventory"])
+            tshirt.style = request.form["style"]
+            tshirt.size = request.form["size"]
+            tshirt.description = tshirt.generate_description()
+
+            db.session.commit()
+            info = "Record updated"
+
+        except KeyError:
+            error = "Key error! " + str(request)
+
+    sizes = TShirt.sizes
+    return render_template("tshirt.html",
+                           tshirt=tshirt,
+                           sizes=sizes,
+                           error=error,
+                           info=info)
 
 
 @app.route("/events")

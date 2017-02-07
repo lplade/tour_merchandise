@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Tour Merchandise{% endblock %}
+{% block content %}
+    <h1>Tour Merchandise</h1>
+    <h2>T-shirt details</h2>
+    <form class="form-inline" action="#" method="post">
+        <div class="form-group">
+            <label for="styleInput">Style</label>
+            <input type="text" class="form-control" id="styleInput"
+                   name="style" value="{{ tshirt.style }}"
+                   oninput="updateDescription()">
+        </div>
+        <div class="form-group">
+            <label for="sizeSelect">Size</label>
+            <select class="form-control" id="sizeSelect"
+                    name="size"
+                    oninput="updateDescription()">
+                {% for size in sizes %}
+                    {% if size == tshirt.size %}
+                        <option selected="selected">{{ size }}</option>
+                    {% else %}
+                        <option>{{ size }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="priceInput">Price</label>
+            <div class="input-group">
+                <div class="input-group-addon">$</div>
+                <input type="number" class="form-control"
+                       id="priceInput" min="0" step="any"
+                       size="6" name="price"
+                       value="{{ tshirt.cost }}">
+                <!-- TODO validate for number -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inventoryInput">Current quantity</label>
+            <input type="number" class="form-control" id="inventoryInput"
+                   name="inventory" min="0" value="{{ tshirt.inventory }}">
+            <!-- TODO validate for number -->
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label>
+            <input type="text" class="form-control" id="desc"
+                   value="{{ tshirt.description }}" readonly>
+        </div>
+        <button type="submit" class="btn btn-default">Update</button>
+
+        <!-- TODO delete button -->
+    </form>
+    {% block jsloads %}
+        <script>
+            function updateDescription(){
+                //this combines the values from some fields and displays them
+                //in the description field
+                var style = document.getElementById("styleInput").value;
+                var size = document.getElementById("sizeSelect").value;
+                document.getElementById("desc").value =
+                    style + " t-shirt, " + size;
+            }
+        </script>
+    {% endblock %}
+
+{% endblock %}

@@ -2,13 +2,52 @@
 {% block title %}Tour Merchandise{% endblock %}
 {% block content %}
     <h1>Tour Merchandise</h1>
+    <h2>New Album</h2>
+    <form class="form-inline" action="#" method="post">
+        <div class="form-group">
+            <label for="newTitle">Album Title</label>
+            <input type="text" class="form-control" id="newTitle"
+                   name="title" placeholder="title of this recording"
+                   oninput="updateDescription()">
+        </div>
+        <div class="form-group">
+            <label for="formatSelect">Format</label>
+            <select class="form-control" id="formatSelect"
+                    name="format" onchange="updateDescription()">
+                {% for format in formats %}
+                    <option>{{ format }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="newPrice">Price</label>
+            <div class="input-group">
+                <div class="input-group-addon">$</div>
+                <input type="number" class="form-control" id="newPrice"
+                       placeholder="0.00" min="0" step="any"
+                       size="6" name="price">
+                <!-- TODO validate for number -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inven">Starting quantity</label>
+            <input type="number" class="form-control" id="inven"
+                   name="inventory">
+            <!-- TODO validate for number -->
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label>
+            <input type="text" class="form-control" id="desc" readonly>
+        </div>
+        <button type="submit" class="btn btn-default">Add</button>
+    </form>
     <div class="table-responsive">
         <h2>Albums</h2>
         <table class="table table-striped">
             <tr>
                 <th>ID#</th><!-- Can we query model for field names? -->
                 <th>Description</th>
-                <th>Cost</th>
+                <th>Price</th>
                 <th># in stock</th>
                 <th>Title</th>
                 <th>Format</th>
@@ -16,17 +55,29 @@
             </tr>
             {% for album in all_albums %}
                 <tr>
-                    <td>{{ tshirt.merch_id }}</td>
-                    <td>{{ tshirt.description }}</td>
-                    <td>{{ tshirt.cost }}</td>
-                    <td>{{ tshirt.inventory }}</td>
-                    <td>{{ tshirt.title }}</td>
-                    <td>{{ tshirt.rec_format }}</td>
+                    <td>{{ album.merch_id }}</td>
+                    <td>{{ album.description }}</td>
+                    <td>{{ "$%5.2f"|format(album.cost) }}</td>
+                    <td>{{ album.inventory }}</td>
+                    <td>{{ album.title }}</td>
+                    <td>{{ album.rec_format }}</td>
                 </tr>
             {% else %}
                 <tr><td>No entries</td></tr>
             {% endfor %}
         </table>
     </div>
+    {% block jsloads %}
+        <script>
+            function updateDescription(){
+                //this combines the values from some fields and displays them
+                //in the description field
+                var title = document.getElementById("newTitle").value;
+                var format = document.getElementById("formatSelect").value;
+                document.getElementById("desc").value =
+                    title + ", on " + format;
+            }
+        </script>
+    {% endblock %}
 
 {% endblock %}
