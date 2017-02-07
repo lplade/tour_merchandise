@@ -3,25 +3,43 @@
 {% block content %}
     <h1>Tour Merchandise</h1>
     <h2>New T-shirt</h2>
-    <form>
+    <form class="form-inline" action="#" method="post">
         <div class="form-group">
             <label for="newTshirtStyle">Style</label>
-            <input type="text" class="form-control" id="newTshirtStyle" placeholder="style">
+            <input type="text" class="form-control" id="newTshirtStyle" name="style" placeholder="a gnarly t-shirt style">
         </div>
         <div class="form-group">
             <label for="sizeSelect">Size</label>
-            <select class="form-control" id="sizeSelect">
+            <select class="form-control" id="sizeSelect" name="size">
                 {% for size in sizes %}
                     <option>{{ size }}</option>
                 {% endfor %}
             </select>
         </div>
+        <div class="form-group">
+            <label for="newPrice">Price</label>
+            <div class="input-group">
+                <div class="input-group-addon">$</div>
+                <input type="number" class="form-control" id="newPrice" placeholder="0.00"  size="6" name="price">
+                <!-- TODO validate for number -->
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inven">Starting quantity</label>
+            <input type="number" class="form-control" id="inven" name="inventory">
+            <!-- TODO validate for number -->
+        </div>
+        <div class="form-group">
+            <label for="desc">Description</label> <!-- TODO js dynamic display -->
+            <input type="text" class="form-control" id="desc" readonly>
+        </div>
+        <button type="submit" class="btn btn-default">Add</button>
     </form>
     <div class="table-responsive">
         <h2>T-Shirts</h2>
         <table class="table table-striped">
             <tr>
-                <th>SKU</th> <!-- Can we query model for field names? -->
+                <th>ID#</th><!-- Can we query model for field names? -->
                 <th>Description</th>
                 <th>Cost</th>
                 <th># in stock</th>
@@ -31,7 +49,7 @@
             </tr>
             {% for tshirt in all_tshirts %}
                 <tr>
-                    <td>{{ tshirt.sku }}</td>
+                    <td>{{ tshirt.merch_id }}</td>
                     <td>{{ tshirt.description }}</td>
                     <td>{{ tshirt.cost }}</td>
                     <td>{{ tshirt.inventory }}</td>

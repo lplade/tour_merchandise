@@ -6,7 +6,7 @@
         <h2>Albums</h2>
         <table class="table table-striped">
             <tr>
-                <th>SKU</th> <!-- Can we query model for field names? -->
+                <th>ID#</th><!-- Can we query model for field names? -->
                 <th>Description</th>
                 <th>Cost</th>
                 <th># in stock</th>
@@ -16,7 +16,7 @@
             </tr>
             {% for album in all_albums %}
                 <tr>
-                    <td>{{ tshirt.sku }}</td>
+                    <td>{{ tshirt.merch_id }}</td>
                     <td>{{ tshirt.description }}</td>
                     <td>{{ tshirt.cost }}</td>
                     <td>{{ tshirt.inventory }}</td>

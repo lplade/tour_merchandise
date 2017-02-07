@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 # Parent class to TShirt, Album. This corresponds to a SKU.
 class Merch(db.Model):
     merch_id = db.Column(db.Integer, primary_key=True)
-    sku = db.Column(db.String(32))  # autogenerate from controller
+    # sku = db.Column(db.String(32))  # autogenerate from controller
     description = db.Column(db.String(64))  # autogenerate from controller
     cost = db.Column(db.Float)
     inventory = db.Column(db.Integer)
@@ -44,19 +44,22 @@ class TShirt(Merch):
         "polymorphic_identity": "t_shirt"
     }
 
-    sizes = ["S", "M", "L", "XL", "XXL", "XXL"]
+    sizes = ["S", "M", "L", "XL", "XXL", "XXXL"]
+    # This goes into form fields
 
     merch_id = db.Column(db.Integer,
                          db.ForeignKey("merch.merch_id"),
                          primary_key=True)
-    size_code = db.Column(db.Integer)
     style = db.Column(db.String(64))
     size = db.Column(db.String(3))
 
     def __init__(self, cost, inventory, style, size):
         super().__init__(cost, inventory)
-        self.style_id = style
-        self.size_code = size  # TODO integrity constraint
+        self.style = style
+        self.size = size  # TODO integrity constraint
+
+    def generate_description(self):
+        return "{} t-shirt, {}".format(self.style, self.size)
 
 
 # subclass of Merch
