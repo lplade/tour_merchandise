@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="container">
-    {% if error is defined %}
+    {% if error %}
         <div class="bg-danger">{{ error }}</div>
     {% endif %}
     {% block content %}{% endblock %}

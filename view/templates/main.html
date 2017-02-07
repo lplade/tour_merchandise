@@ -5,19 +5,16 @@
         <h1>Tour Merchandise</h1>
         <div class="table-responsive">
             <table class="table table-striped">
-                <!-- TODO for now we fake the table and use __repr__.
-                     In the future the merch __repr__ will return a useful format we can parse into
-                     table cells -->
                 <tr>
-                    <th>SKU</th> <!-- Can we query model for field names? -->
+                    <th>ID#</th> <!-- Can we query model for field names? -->
                     <th>Cost</th>
                     <th># in stock</th>
-                    <th>type</th>
+                    <th>type</th> <!-- TODO hide this when things work -->
                 </tr>
                 {% for item in all_merch %}
                     <tr>
                         <td>{{ item.merch_id }}</td>
-                        <td>{{ item.cost }}</td>
+                        <td>{{ "$%5.2f"|format(item.cost) }}</td>
                         <td>{{ item.inventory }}</td>
                         <td>{{ item.type }}</td>
                     </tr>
