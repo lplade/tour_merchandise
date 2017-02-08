@@ -20,8 +20,9 @@ db = SQLAlchemy(app)
 # Parent class to TShirt, Album. This corresponds to a SKU.
 class Merch(db.Model):
     merch_id = db.Column(db.Integer, primary_key=True)
-    # sku = db.Column(db.String(32))  # autogenerate from controller
-    description = db.Column(db.String(64))  # autogenerate from controller
+    # We store a description as a common field to display for all subclasses
+    # controller should call generate_description() before committing object.
+    description = db.Column(db.String(64))
     price = db.Column(db.Float)
     inventory = db.Column(db.Integer)
     type = db.Column(db.String(12))

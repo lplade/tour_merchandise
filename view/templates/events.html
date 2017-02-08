@@ -1,7 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Tour Merchandise{% endblock %}
 {% block content %}
+    <ol class="breadcrumb">
+        <li><a href="/">Main</a></li>
+        <li class="active">Events</li>
+    </ol>
     <h1>Tour Merchandise</h1>
+    <h2>New Event</h2>
+    <form class="form" action="#" method="post">
+        <div class="form-group">
+            <label for="venueInput">Venue name</label>
+            <input type="text" class="form-control" id="styleInput"
+
+        </div>
+    </form>
     <div class="table-responsive">
         <h2>Events</h2>
         <table class="table table-striped">
@@ -21,8 +33,7 @@
                     <td>{{ event.city }}</td>
                     <td>{{ event.state }}</td>
                     <td>{{ event.country }}</td>
-                    <td>{{ event.date }}</td>
-
+                    <td>{{ event.date }}</td> <!-- format? -->
                 </tr>
             {% else %}
                 <tr><td>No entries</td></tr>

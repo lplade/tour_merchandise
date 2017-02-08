@@ -10,7 +10,7 @@ view_dir = os.path.join(base_dir, "view")  # ../view
 template_dir = os.path.join(view_dir, "templates")  # ../view/templates
 static_dir = os.path.join(view_dir, "static")  # ../view/static
 
-# print(template_dir)
+print(static_dir)
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
@@ -18,6 +18,9 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 """
 ROUTES
 """
+
+
+
 
 
 @app.route("/")
@@ -181,6 +184,9 @@ def delete_merch(merch_id):
     In the real world, this is a disastrously insecure implementation.
     :return:
     """
+    # Would prefer to use HTTP DELETE instead of GET
+    # will have to review http://flask.pocoo.org/snippets/1/
+
     error = None
     info = None
 
@@ -196,6 +202,16 @@ def delete_merch(merch_id):
 def event_list():
     all_events = Event.query.all()
     return render_template("events.html", all_events=all_events)
+
+
+@app.route("/<path:path>")
+def serve_static(path):
+    """
+    Assume any request not matching above routes is request for static resource
+    :param path:
+    :return:
+    """
+    return app.send_static_file(path)
 
 if __name__ == "__main__":
     app.run()
