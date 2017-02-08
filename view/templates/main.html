@@ -1,24 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Tour Merchandise{% endblock %}
 {% block content %}
+    <ol class="breadcrumb">
+        <li class="active">Main</li>
+    </ol>
     <div class="row">
         <h1>Tour Merchandise</h1>
         <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped table-hover">
                 <tr>
                     <th>ID#</th> <!-- Can we query model for field names? -->
                     <th>Description</th>
                     <th>Cost</th>
                     <th># in stock</th>
-                    <th>type</th> <!-- TODO hide this when things work -->
+                    <!-- <th>type</th> -->
                 </tr>
                 {% for item in all_merch %}
-                    <tr>
+                    {% if item.type == "t_shirt" %}
+                        <tr class="clickable-row" data-href="/tshirt/{{ item.merch_id }}">
+                    {% elif item.type == "album" %}
+                        <tr class="clickable-row" data-href="/album/{{ item.merch_id }}">
+                    {% else %}
+                        <tr>
+                    {% endif %}
                         <td>{{ item.merch_id }}</td>
                         <td>{{ item.description }}</td>
                         <td>{{ "$%5.2f"|format(item.cost) }}</td>
                         <td>{{ item.inventory }}</td>
-                        <td>{{ item.type }}</td>
+                        <!-- <td>{{ item.type }}</td> -->
                     </tr>
                 {% else %}
                     <tr><td>No entries</td></tr>
@@ -34,5 +43,15 @@
             <p><a href="/events">Events</a></p>
         </div>
     </div>
+    {% block custom_js %}
+        <script>
+            // http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
+        </script>
+    {% endblock %}
 
 {% endblock %}

@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Tour Merchandise{% endblock %}
 {% block content %}
+    <ol class="breadcrumb">
+        <li><a href="/">Main</a></li>
+        <li class="selected">Albums</li>
+
+    </ol>
     <h1>Tour Merchandise</h1>
     <h2>New Album</h2>
-    <form class="form-inline" action="#" method="post">
+    <form class="form" action="#" method="post">
         <div class="form-group">
             <label for="newTitle">Album Title</label>
             <input type="text" class="form-control" id="newTitle"
@@ -67,7 +72,7 @@
             {% endfor %}
         </table>
     </div>
-    {% block jsloads %}
+    {% block custom_js%}
         <script>
             function updateDescription(){
                 //this combines the values from some fields and displays them

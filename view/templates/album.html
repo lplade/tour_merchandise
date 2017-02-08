@@ -3,28 +3,28 @@
 {% block content %}
     <ol class="breadcrumb">
         <li><a href="/">Main</a></li>
-        <li><a href="/tshirts">T-shirts</a></li>
+        <li><a href="/albums">Albums</a></li>
         <li class="active">Details</li>
     </ol>
     <h1>Tour Merchandise</h1>
-    <h2>T-shirt details</h2>
+    <h2>Album details</h2>
     <form class="form" action="#" method="post">
         <div class="form-group">
-            <label for="styleInput">Style</label>
-            <input type="text" class="form-control" id="styleInput"
-                   name="style" value="{{ tshirt.style }}"
+            <label for="titleInput">Title</label>
+            <input type="text" class="form-control" id="titleInput"
+                   name="title" value="{{ album.title }}"
                    oninput="updateDescription()">
         </div>
         <div class="form-group">
-            <label for="sizeSelect">Size</label>
-            <select class="form-control" id="sizeSelect"
-                    name="size"
+            <label for="formatSelect">Format</label>
+            <select class="form-control" id="formatSelect"
+                    name="rec_format"
                     oninput="updateDescription()">
-                {% for size in sizes %}
-                    {% if size == tshirt.size %}
-                        <option selected="selected">{{ size }}</option>
+                {% for rec_format in formats %}
+                    {% if rec_format == album.rec_format %}
+                        <option selected="selected">{{ rec_format }}</option>
                     {% else %}
-                        <option>{{ size }}</option>
+                        <option>{{ rec_format }}</option>
                     {% endif %}
                 {% endfor %}
             </select>
@@ -36,20 +36,20 @@
                 <input type="number" class="form-control"
                        id="priceInput" min="0" step="any"
                        size="6" name="price"
-                       value="{{ tshirt.cost }}">
+                       value="{{ album.cost }}">
                 <!-- TODO validate for number -->
             </div>
         </div>
         <div class="form-group">
             <label for="inventoryInput">Current quantity</label>
             <input type="number" class="form-control" id="inventoryInput"
-                   name="inventory" min="0" value="{{ tshirt.inventory }}">
+                   name="inventory" min="0" value="{{ album.inventory }}">
             <!-- TODO validate for number -->
         </div>
         <div class="form-group">
             <label for="desc">Description</label>
             <input type="text" class="form-control" id="desc"
-                   value="{{ tshirt.description }}" readonly>
+                   value="{{ album.description }}" readonly>
         </div>
         <button type="submit" class="btn btn-default">Update</button>
 
@@ -60,10 +60,10 @@
             function updateDescription(){
                 //this combines the values from some fields and displays them
                 //in the description field
-                var style = document.getElementById("styleInput").value;
-                var size = document.getElementById("sizeSelect").value;
+                var title = document.getElementById("titleInput").value;
+                var rec_format = document.getElementById("formatSelect").value;
                 document.getElementById("desc").value =
-                    style + " t-shirt, " + size;
+                    title + ", on " + rec_format;
             }
         </script>
     {% endblock %}

@@ -55,38 +55,6 @@ def tshirt_list():
                            sizes=sizes,
                            error=error)
 
-
-@app.route("/albums", methods=["POST", "GET"])
-def album_list():
-    """
-    Renders a list of all Albums, and allows submission of new Album by form
-    :return:
-    """
-    error = None
-    if request.method == "POST":
-        try:
-            album = Album(cost=float(request.form["price"]),
-                          inventory=int(request.form["inventory"]),
-                          title=request.form("title"),
-                          rec_format=request.form("format"))
-            album.description = album.generate_description()
-            db.session.add(album)
-            db.session.commit()
-        except KeyError:
-            error = "Key error! " + str(request)
-
-    all_albums = Album.query.all()
-    formats = Album.formats
-
-    return render_template("albums.html",
-                           all_albums=all_albums,
-                           formats=formats,
-                           error=error)
-
-# pretty useful:
-# https://techarena51.com/index.php/flask-sqlalchemy-tutorial/
-
-
 @app.route("/tshirt/<int:merch_id>", methods=["POST", "GET"])
 def tshirt_properties(merch_id):
     """
@@ -120,10 +88,86 @@ def tshirt_properties(merch_id):
         except KeyError:
             error = "Key error! " + str(request)
 
+    # Regardless of whether GET or returning from POST, display details
+
     sizes = TShirt.sizes
     return render_template("tshirt.html",
                            tshirt=tshirt,
                            sizes=sizes,
+                           error=error,
+                           info=info)
+
+
+@app.route("/albums", methods=["POST", "GET"])
+def album_list():
+    """
+    Renders a list of all Albums, and allows submission of new Album by form
+    :return:
+    """
+    error = None
+    if request.method == "POST":
+        try:
+            album = Album(cost=float(request.form["price"]),
+                          inventory=int(request.form["inventory"]),
+                          title=request.form("title"),
+                          rec_format=request.form("format"))
+            album.description = album.generate_description()
+            db.session.add(album)
+            db.session.commit()
+        except KeyError:
+            error = "Key error! " + str(request)
+
+    all_albums = Album.query.all()
+    formats = Album.formats
+
+    return render_template("albums.html",
+                           all_albums=all_albums,
+                           formats=formats,
+                           error=error)
+
+# pretty useful:
+# https://techarena51.com/index.php/flask-sqlalchemy-tutorial/
+
+
+@app.route("/album/<int:merch_id>", methods=["POST", "GET"])
+def album_properties(merch_id):
+    """
+    Display properties for a single t-shirt.
+    Allows us to update or delete record.
+    :param merch_id:
+    :return:
+    """
+
+    # Would prefer to use HTTP PUT. This appears to be not straightforward.
+
+    error = None
+    info = None
+
+    album = Album.query.get(merch_id)
+    if album is None:
+        return render_template("notfound.html",
+                               merch_id=merch_id)
+    elif request.method == "POST":
+        try:
+            # Update the stored object with new values from form
+            album.cost = float(request.form["price"])
+            album.inventory = int(request.form["inventory"])
+            album.title = request.form["title"]
+            album.rec_format = request.form["rec_format"]
+            album.description = album.generate_description()
+
+            db.session.commit()
+            info = "Record updated"
+
+        except KeyError:
+            error = "Key error! " + str(request)
+
+    # Regardless of whether GET or returning from POST, display details
+
+    formats = Album.formats
+    return render_template("album.html",
+                           album=album,
+                           formats=formats,
                            error=error,
                            info=info)
 
