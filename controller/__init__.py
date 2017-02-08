@@ -173,17 +173,23 @@ def album_properties(merch_id):
                            info=info)
 
 
-@app.route("/delete/<int:merch_id>", methods=["POST"])
+@app.route("/delete/<int:merch_id>", methods=["GET"])
 def delete_merch(merch_id):
     """
-    Delete an item. In the real world, this is a disastrously insecure implmentation.
+    Delete an item.
     Need to pass merch_id and type (t_shirt or album) via form
+    In the real world, this is a disastrously insecure implementation.
     :return:
     """
     error = None
     info = None
 
     merch = Merch.query.get(merch_id)
+    db.session.delete(merch)
+    db.session.commit()
+
+    return redirect("/", code=303)
+    # TODO pass some feedback
 
 
 @app.route("/events")
