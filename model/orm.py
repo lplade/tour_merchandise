@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 # Do this to put the db in the base folder
 # Double .dirname() = parent dir
+
+
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "merch.db")
 
@@ -20,7 +22,7 @@ class Merch(db.Model):
     merch_id = db.Column(db.Integer, primary_key=True)
     # sku = db.Column(db.String(32))  # autogenerate from controller
     description = db.Column(db.String(64))  # autogenerate from controller
-    cost = db.Column(db.Float)
+    price = db.Column(db.Float)
     inventory = db.Column(db.Integer)
     type = db.Column(db.String(12))
     # this is the discriminator field, and should be one of
@@ -33,8 +35,8 @@ class Merch(db.Model):
         "polymorphic_on": type
     }
 
-    def __init__(self, cost, inventory):
-        self.cost = cost
+    def __init__(self, price, inventory):
+        self.price = price
         self.inventory = inventory
 
 
@@ -48,13 +50,13 @@ class TShirt(Merch):
     # This goes into form fields
 
     merch_id = db.Column(db.Integer,
-                         db.ForeignKey("merch.merch_id"),
+                         db.ForeignKey("merch.merch_id", ondelete="CASCADE"),
                          primary_key=True)
     style = db.Column(db.String(64))
     size = db.Column(db.String(3))
 
-    def __init__(self, cost, inventory, style, size):
-        super().__init__(cost, inventory)
+    def __init__(self, price, inventory, style, size):
+        super().__init__(price, inventory)
         self.style = style
         self.size = size  # TODO integrity constraint
 
@@ -71,13 +73,13 @@ class Album(Merch):
     formats = ["CD", "vinyl"]
 
     merch_id = db.Column(db.Integer,
-                         db.ForeignKey("merch.merch_id"),
+                         db.ForeignKey("merch.merch_id", ondelete="CASCADE"),
                          primary_key=True)
     title = db.Column(db.String(80))
     rec_format = db.Column(db.String(5))
 
-    def __init__(self, cost, inventory, title, rec_format):
-        super().__init__(cost, inventory)
+    def __init__(self, price, inventory, title, rec_format):
+        super().__init__(price, inventory)
         self.title = title
         self.rec_format = rec_format  # TODO integrity constraint
 

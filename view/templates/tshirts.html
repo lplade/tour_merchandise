@@ -52,7 +52,7 @@
             <tr>
                 <th>ID#</th><!-- Can we query model for field names? -->
                 <th>Description</th>
-                <th>Cost</th>
+                <th>Price</th>
                 <th># in stock</th>
                 <th>Style</th>
                 <th>Size</th>
@@ -62,7 +62,7 @@
                 <tr>
                     <td>{{ tshirt.merch_id }}</td>
                     <td>{{ tshirt.description }}</td>
-                    <td>{{ "$%5.2f"|format(tshirt.cost) }}</td>
+                    <td>{{ "$%5.2f"|format(tshirt.price) }}</td>
                     <td>{{ tshirt.inventory }}</td>
                     <td>{{ tshirt.style }}</td>
                     <td>{{ tshirt.size }}</td>

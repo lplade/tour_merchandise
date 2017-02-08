@@ -35,7 +35,7 @@ def tshirt_list():
     error = None
     if request.method == "POST":
         try:
-            t_shirt = TShirt(cost=float(request.form["price"]),
+            t_shirt = TShirt(price=float(request.form["price"]),
                              inventory=int(request.form["inventory"]),
                              style=request.form["style"],
                              size=request.form["size"])
@@ -54,6 +54,7 @@ def tshirt_list():
                            all_tshirts=all_tshirts,
                            sizes=sizes,
                            error=error)
+
 
 @app.route("/tshirt/<int:merch_id>", methods=["POST", "GET"])
 def tshirt_properties(merch_id):
@@ -76,7 +77,7 @@ def tshirt_properties(merch_id):
     elif request.method == "POST":
         try:
             # Update the stored object with new values from form
-            tshirt.cost = float(request.form["price"])
+            tshirt.price = float(request.form["price"])
             tshirt.inventory = int(request.form["inventory"])
             tshirt.style = request.form["style"]
             tshirt.size = request.form["size"]
@@ -107,10 +108,10 @@ def album_list():
     error = None
     if request.method == "POST":
         try:
-            album = Album(cost=float(request.form["price"]),
+            album = Album(price=float(request.form["price"]),
                           inventory=int(request.form["inventory"]),
-                          title=request.form("title"),
-                          rec_format=request.form("format"))
+                          title=request.form["title"],
+                          rec_format=request.form["format"])
             album.description = album.generate_description()
             db.session.add(album)
             db.session.commit()
@@ -150,7 +151,7 @@ def album_properties(merch_id):
     elif request.method == "POST":
         try:
             # Update the stored object with new values from form
-            album.cost = float(request.form["price"])
+            album.price = float(request.form["price"])
             album.inventory = int(request.form["inventory"])
             album.title = request.form["title"]
             album.rec_format = request.form["rec_format"]
@@ -170,6 +171,19 @@ def album_properties(merch_id):
                            formats=formats,
                            error=error,
                            info=info)
+
+
+@app.route("/delete/<int:merch_id>", methods=["POST"])
+def delete_merch(merch_id):
+    """
+    Delete an item. In the real world, this is a disastrously insecure implmentation.
+    Need to pass merch_id and type (t_shirt or album) via form
+    :return:
+    """
+    error = None
+    info = None
+
+    merch = Merch.query.get(merch_id)
 
 
 @app.route("/events")
