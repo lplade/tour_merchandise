@@ -7,7 +7,6 @@ import datetime
 # Do this to put the db in the base folder
 # Double .dirname() = parent dir
 
-
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "merch.db")
 
@@ -26,16 +25,19 @@ class Merch(db.Model):
     description = db.Column(db.String(64))
     price = db.Column(db.Float)
     inventory = db.Column(db.Integer)
+
     type = db.Column(db.String(12))
-
-    event_list = db.relationship("Event", secondary="merch_sold", viewonly=True)
-    # merch_sold_list <- backref
-
     # this is the discriminator field, and should be one of
     # * 'tshirt'
     # * 'album'
     #
     # http://docs.sqlalchemy.org/en/latest/orm/inheritance.html
+
+    # Can use this to get a list of Events where this Merch has been sold
+    event_list = db.relationship("Event", secondary="merch_sold", viewonly=True)
+    # merch_sold_list <- backref
+
+
     __mapper_args__ = {
         "polymorphic_identity": "merch",
         "polymorphic_on": type
@@ -106,6 +108,7 @@ class Event(db.Model):
     event_date = db.Column(db.Date)
     # merch_sold_list <- backref
 
+    # Can use this to get a list of Merch that has been sold at this Event
     merch_list = db.relationship("Merch", secondary="merch_sold", viewonly=True)
 
     def __init__(self, venue_name, city, state, country, date_string):
@@ -148,9 +151,19 @@ class MerchSold(db.Model):
                          primary_key=True)
     items_sold = db.Column(db.Integer)
 
+    # These expose the corresponding Merch and Event, and also apply
+    # a merch_sold_list attribute to those objects, linking here
     # https://gist.github.com/SuryaSankar/10091097
-    merch = db.relationship("Merch", backref=db.backref("merch_sold_list", cascade="all, delete-orphan"))
-    event = db.relationship("Event", backref=db.backref("merch_sold_list", cascade="all, delete-orphan"))
+    merch = db.relationship(
+        "Merch",
+        backref=db.backref(
+            "merch_sold_list",
+            cascade="all, delete-orphan"))
+    event = db.relationship(
+        "Event",
+        backref=db.backref(
+            "merch_sold_list",
+            cascade="all, delete-orphan"))
 
     def __init__(self, merch, event, items_sold=0):
         self.merch = merch
