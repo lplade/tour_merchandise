@@ -286,18 +286,38 @@ def merch_event(event_id):
     error = None
     info = None
 
+    all_merch = Merch.query.all()
     event = Event.query.get(event_id)
     if event is None:
         return render_template("enotfound.html",
                                event_id=event_id)
     elif request.method == "POST":
-        pass
+        _merch_id = int(request.form["merch_id"])
+        _num_sold = int(request.form["num_sold"])
 
-    for item in event.merch_list:
-        print(item.description)
-        print(item.merch_sold_list)
-        for i in item.merch_sold_list:
-            print(i.items_sold)
+        found_entry = None
+        # first, check if that MerchSold is in the table
+        for item in event.merch_sold_list:
+            if item.merch_id == _merch_id:
+                found_entry = item
+        # if not, add it to the table
+        if found_entry is None:
+            merch = Merch.query.get(_merch_id)
+            # TODO handle failure of above
+            merch_sold = MerchSold(merch=merch, event=event, items_sold=_num_sold)
+            db.session.add(merch_sold)
+        # otherwise, update the value
+        else:
+            found_entry.sell_merch(_num_sold)
+
+        db.session.commit()
+        info = "Updated"
+
+    # for item in event.merch_list:
+    #     print(item.description)
+    #     print(item.merch_sold_list)
+    #     for i in item.merch_sold_list:
+    #         print(i.items_sold)
 
     return render_template("merchevent.html",
                            error=error,

@@ -27,7 +27,13 @@
                         <td>{{ item.description }}</td>
                         <td>{{ "$%5.2f"|format(item.price) }}</td>
                         <td>{{ item.inventory }}</td>
-                        <td>{{ item.merch_sold_list[0].items_sold }}</td>
+                        <td>
+                            {% for relationship in item.merch_sold_list %}
+                                {% if relationship.merch_id == item.merch_id %}
+                                    {{ relationship.items_sold }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>
                             <form class="form form-inline" action="#" method="post">
                                 <input type="number" class="form-control" id="inputSold{{ item.merch_id }}"
