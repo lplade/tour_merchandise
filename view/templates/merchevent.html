@@ -1,10 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Tour Merchandise{% endblock %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="/">Main</a></li>
+        <li><a href="/events">Events</a></li>
+        <li><a href="/event/{{ event.event_id }}">Details</a></li>
+        <li class="active">Sell merchandise</li>
+    </ol>
+    <div class="row">
+        <h1>Tour Merchandise</h1>
+        <h2>Sell some merchandise</h2>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <tr>
+                    <th>ID#</th> <!-- Can we query model for field names? -->
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th># in stock</th>
+                    <th># sold here</th>
+                    <th># to sell</th>
+                    <!-- <th>type</th> -->
+                </tr>
+                {% for item in merch_sold_list %}
+                    <tr>
+                        <td>{{ item.merch_id }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ "$%5.2f"|format(item.price) }}</td>
+                        <td>{{ item.inventory }}</td>
+                        <td>{{ item.items_sold }}</td>
+                        <td>
+                            <form class="form form-inline" action="#" method="post">
+                                <input type="number" class="form-control" id="inputSold{{ item.merch_id }}"
+                                       name="num_sold" min="0" max="{{ item.inventory }}"> <!-- TODO should validate number too -->
+                                <input type="hidden" name="merch_id" value="{{ item.merch_id }}">
+                                <!-- <input type="hidden" name="event_id" value="{{ event.event_id }}"> Don't need if we use URI to ID event -->
+                                <button type="submit" class="btn btn-default btn-sm">Sell</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td>No entries</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script>
+            // http://stackoverflow.com/questions/17147821/how-to-make-a-whole-row-in-a-table-clickable-as-a-link
+            jQuery(document).ready(function($) {
+                $(".clickable-row").click(function() {
+                    window.location = $(this).data("href");
+                });
+            });
+        </script>
+    {% endblock %}
 
-</body>
-</html>
+{% endblock %}

@@ -136,3 +136,16 @@ class MerchSold(db.Model):
                          db.ForeignKey("event.event_id"),
                          primary_key=True)
     items_sold = db.Column(db.Integer)
+
+
+# use this object to store event-merch view
+# this class doesn't get stored in the database, derived from other classes
+class MerchSoldView:
+
+    def __init__(self, merch_id, event_id, items_sold, description, price, inventory):
+        self.merch_id = merch_id
+        self.event_id = event_id
+        self.items_sold = items_sold
+        self.description = description
+        self.price = price
+        self.inventory = inventory

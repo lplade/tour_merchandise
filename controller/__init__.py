@@ -286,20 +286,76 @@ def merch_event(event_id):
     error = None
     info = None
 
+    # Simulate a "view" with data mapped from the MerchSold table
+    # TODO figure out how to make db backend do this work
+    # TODO modularize some of this
+
+    if request.method == "POST":
+        try:
+            num_sold = int(request.form["num_sold"])
+            merch_id = int(request.form["merch_id"])
+            event_id = event_id
+
+            # Need to decrement the inventory
+            merch_being_sold = Merch.query.get(merch_id)
+            if num_sold > merch_being_sold.inventory:
+                pass  # TODO display error and fail gracefully
+            merch_being_sold.inventory -= num_sold
+
+            merch_sold_row = MerchSold.query.filter(db.and_(
+                MerchSold.event_id == event_id,
+                MerchSold.merch_id == merch_id,
+            ))
+            if merch_sold_row is None:
+                new_merch_sold = MerchSold(merch_id=merch_id, event_id=event_id, items_sold=num_sold)
+                db.session.add(new_merch_sold)
+            else:
+                merch_sold_row.items_sold += num_sold
+
+            # Should save changes to both Merch and MerchSold
+            db.session.commit()
+            info = "Updated"
+
+        except KeyError:
+            error = "Key error! " + str(request)
+
+    # Stuff that happens for both POST and GET
+
     all_merch = Merch.query.all()
     event = Event.query.get(event_id)
     if event is None:
         return render_template("enotfound.html",
                                event_id=event_id)
-    elif request.method == "POST":
-        pass
+    merch_sold_list = []
+
+    for a_merch in all_merch:
+        merch_sold_row = MerchSold.query.filter(db.and_(
+            MerchSold.event_id == event_id,
+            MerchSold.merch_id == a_merch.merch_id
+        ))  # This should return a MerchSold mapped object
+        try:
+            merch_sold = merch_sold_row.items_sold
+        except AttributeError:  # no data in table for this pair
+            merch_sold = 0
+
+        merch_sold_object = MerchSoldView(
+            merch_id=a_merch.merch_id,
+            event_id=event.event_id,
+            items_sold=merch_sold,
+            description=a_merch.description,
+            price=a_merch.price,
+            inventory=a_merch.inventory
+        )
+        merch_sold_list.append(merch_sold_object)
+
+    # Now merch_sold_list should contain all the data about all the merchandise for this event
+    # We can pass this into our view
 
     return render_template("merchevent.html",
-                           all_merch=all_merch,
                            event=event,
+                           merch_sold_list=merch_sold_list,
                            error=error,
                            info=info)
-
 
 
 @app.route("/<path:path>")
