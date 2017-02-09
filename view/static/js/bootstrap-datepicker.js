@@ -200,7 +200,7 @@
 			// Processed options
 			var o = this.o = $.extend({}, this._o);
 
-			// Check if "de-DE" style date is available, if not language should
+			// Check if "de-DE" style event_date is available, if not language should
 			// fallback to 2 letter code eg "de"
 			var lang = o.language;
 			if (!dates[lang]){
@@ -787,11 +787,11 @@
 				this.viewDate = this.o.defaultViewDate;
 
 			if (fromArgs){
-				// setting date by clicking
+				// setting event_date by clicking
 				this.setValue();
 			}
 			else if (dates.length){
-				// setting date by typing
+				// setting event_date by typing
 				if (String(oldDates) !== String(this.dates))
 					this._trigger('changeDate');
 			}
@@ -857,7 +857,7 @@
 			}
 			if (this.focusDate && date.valueOf() === this.focusDate.valueOf())
 				cls.push('focused');
-			// Compare internal UTC date with local today, not UTC today
+			// Compare internal UTC event_date with local today, not UTC today
 			if (this.o.todayHighlight &&
 				date.getUTCFullYear() === today.getFullYear() &&
 				date.getUTCMonth() === today.getMonth() &&
@@ -870,7 +870,7 @@
 				cls.push('disabled');
 			}
 			if (this.dateIsDisabled(date)){
-				cls.push('disabled', 'disabled-date');	
+				cls.push('disabled', 'disabled-event_date');
 			} 
 			if ($.inArray(date.getUTCDay(), this.o.daysOfWeekHighlighted) !== -1){
 				cls.push('highlighted');
@@ -1000,7 +1000,7 @@
 						// ISO 8601: First week contains first thursday.
 						// ISO also states week starts on Monday, but we can be more abstract here.
 						var
-							// Start of current week: based on weekstart/current date
+							// Start of current week: based on weekstart/current event_date
 							ws = new Date(+prevMonth + (this.o.weekStart - prevMonth.getUTCDay() - 7) % 7 * 864e5),
 							// Thursday of this week
 							th = new Date(Number(ws) + (7 + 4 - ws.getUTCDay()) % 7 * 864e5),
@@ -1384,7 +1384,7 @@
 					};
 				new_month = month + dir;
 				new_date.setUTCMonth(new_month);
-				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected date to 0-11
+				// Dec -> Jan (12) or Jan -> Dec (-1) -- limit expected event_date to 0-11
 				if (new_month < 0 || new_month > 11)
 					new_month = (new_month + 12) % 12;
 			}
@@ -1400,7 +1400,7 @@
 					return new_month !== new_date.getUTCMonth();
 				};
 			}
-			// Common date-resetting loop -- if date is beyond end of month, make it
+			// Common event_date-resetting loop -- if event_date is beyond end of month, make it
 			// end of month
 			while (test()){
 				new_date.setUTCDate(--day);
@@ -1661,7 +1661,7 @@
 	function opts_from_locale(lang){
 		// Derive options from locale plugins
 		var out = {};
-		// Check if "de-DE" style date is available, if not language should
+		// Check if "de-DE" style event_date is available, if not language should
 		// fallback to 2 letter code eg "de"
 		if (!dates[lang]){
 			lang = lang.split('-')[0];
@@ -1826,7 +1826,7 @@
 			var separators = format.replace(this.validParts, '\0').split('\0'),
 				parts = format.match(this.validParts);
 			if (!separators || !separators.length || !parts || parts.length === 0){
-				throw new Error("Invalid date format.");
+				throw new Error("Invalid event_date format.");
 			}
 			return {separators: separators, parts: parts};
 		},

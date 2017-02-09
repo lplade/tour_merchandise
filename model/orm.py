@@ -95,20 +95,20 @@ class Event(db.Model):
     city = db.Column(db.String(80))
     state = db.Column(db.String(12))  # longer for non-US
     country = db.column(db.String(80))
-    date = db.Column(db.Date)
+    event_date = db.Column(db.Date)
 
-    def __init__(self, venue_name, city, state, country, date):
+    def __init__(self, venue_name, city, state, country, event_date):
         self.venue_name = venue_name
         self.city = city
         self.state = state
         self.country = country
-        self.date = date
+        self.event_date = event_date
 
     def __repr__(self):
         return "ID %3d:  Venue: %r  City: %r  State: %r  " \
                "Country: %r  Date: %r" % format(
                     self.event_id, self.venue_name, self.city,
-                    self.state, self.country, self.date
+                    self.state, self.country, self.event_date
                 )
 
 

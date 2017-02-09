@@ -3,7 +3,7 @@
 # note that the Flask imports are in orm.py
 from model.orm import *
 from flask import render_template, request, flash, redirect, url_for
-from datetime import date, datetime
+import datetime
 
 # tell flask about our folder setup
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))  # ../
@@ -11,10 +11,22 @@ view_dir = os.path.join(base_dir, "view")  # ../view
 template_dir = os.path.join(view_dir, "templates")  # ../view/templates
 static_dir = os.path.join(view_dir, "static")  # ../view/static
 
-print(static_dir)
+# print(static_dir)
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
+
+@app.template_filter("date")
+def format_date(value, format="%Y-%m-%d"):
+    """
+    Create a custom formatter for Jinja2 so it doesn't choke on datetime.date objects
+    :param value:
+    :param format:
+    :return:
+    """
+    return value.strftime(format)
+
+app.jinja_env.filters['date'] = format_date
 
 """
 ROUTES
@@ -207,11 +219,17 @@ def event_list():
 
     if request.method == "POST":
         try:
+            # We have to parse the event_date field into a datetime.event_date
+            # SQLalchemy handles int conversion for SQLite
+            date_string = request.form["event_date"]
+            print("Raw event_date string: " + date_string)
+            date_date = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
             event = Event(venue_name=request.form["venue_name"],
                           city=request.form["city"],
                           state=request.form["state"],
                           country=request.form["country"],
-                          date=(request.form["date"]))
+                          event_date=date_date
+                          )
             db.session.add(event)
             db.session.commit()
         except KeyError:
@@ -219,7 +237,7 @@ def event_list():
 
     all_events = Event.query.all()
 
-    return render_template("events.html", all_events=all_events)
+    return render_template("events.html", all_events=all_events, error=error, info=info)
 
 
 @app.route("/<path:path>")

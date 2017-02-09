@@ -27,8 +27,12 @@
         </div>
         <div class="form-group">
             <label for="dateInput">Date</label>
-            <input class="form-control" id="dateInput" name="date"
-                   type="date" min="2017-01-01">
+            <div class="input-group date" data-provide="datepicker">
+                <input class="form-control" id="dateInput" name="event_date" type="text">
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-th"></i>
+                </span>
+            </div>
             <!--TODO validate input -->
         </div>
         <button type="submit" class="btn btn-default">Add</button>
@@ -52,12 +56,26 @@
                     <td>{{ event.city }}</td>
                     <td>{{ event.state }}</td>
                     <td>{{ event.country }}</td>
-                    <td>{{ event.date }}</td> <!-- format? -->
+                    <td>{{ event.event_date }}</td> <!-- format? -->
                 </tr>
             {% else %}
                 <tr><td>No entries</td></tr>
             {% endfor %}
         </table>
     </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            // options for bootstrap-datepicker component
+            $('.input-group.date').datepicker({
+                format: "yyyy-mm-dd",
+                maxViewMode: 2,
+                todayBtn: "linked",
+                orientation: "bottom auto",
+                daysOfWeekHighlighted: "0,6",
+                autoclose: true,
+                todayHighlight: true
+            });
+        </script>
+    {% endblock %}
 
 {% endblock %}
