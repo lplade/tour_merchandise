@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import datetime
 
 # Do this to put the db in the base folder
 # Double .dirname() = parent dir
@@ -94,22 +95,16 @@ class Event(db.Model):
     venue_name = db.Column(db.String(80))
     city = db.Column(db.String(80))
     state = db.Column(db.String(12))  # longer for non-US
-    country = db.column(db.String(80))
+    country = db.Column(db.String(80))
     event_date = db.Column(db.Date)
 
-    def __init__(self, venue_name, city, state, country, event_date):
+    def __init__(self, venue_name, city, state, country, date_string):
         self.venue_name = venue_name
         self.city = city
         self.state = state
         self.country = country
-        self.event_date = event_date
-
-    def __repr__(self):
-        return "ID %3d:  Venue: %r  City: %r  State: %r  " \
-               "Country: %r  Date: %r" % format(
-                    self.event_id, self.venue_name, self.city,
-                    self.state, self.country, self.event_date
-                )
+        # Convert a string to datetime.date object
+        self.event_date = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
 
 
 # list of items sold per event
