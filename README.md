@@ -1,21 +1,33 @@
+Setup
+-----
+
 Create the database with
 ~~~~
 from model.orm import db
 db.create_all()
 ~~~~
 
-Python
+To do
+-----
+* Fix numerous undiscovered bugs
+* Make UX suck less
 
-SQLite
 
-[Flask](http://flask.pocoo.org/docs/0.12/)
+Technologies
+------------
 
-[Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/)
+* Python
 
-[Jinja2](http://jinja.pocoo.org/docs/2.9/)
+* SQLite
 
-[SQLAlchemy](http://docs.sqlalchemy.org/en/latest/index.html)
+* [Flask](http://flask.pocoo.org/docs/0.12/)
 
-[Bootstrap](http://getbootstrap.com/getting-started/)
+* [Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/)
 
-[bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker)
+* [Jinja2](http://jinja.pocoo.org/docs/2.9/)
+
+* [SQLAlchemy](http://docs.sqlalchemy.org/en/latest/index.html)
+
+* [Bootstrap](http://getbootstrap.com/getting-started/)
+
+* [bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker)
