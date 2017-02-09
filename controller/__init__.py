@@ -286,6 +286,10 @@ def merch_event(event_id):
     error = None
     info = None
 
+    # Here is where we deleted a bunch of awful code to manually map
+    # data between related tables before figuring out how to make the
+    # ORM handle it
+
     all_merch = Merch.query.all()
     event = Event.query.get(event_id)
     if event is None:
@@ -304,7 +308,9 @@ def merch_event(event_id):
         if found_entry is None:
             merch = Merch.query.get(_merch_id)
             # TODO handle failure of above
-            merch_sold = MerchSold(merch=merch, event=event, items_sold=_num_sold)
+            merch_sold = MerchSold(
+                merch=merch, event=event, items_sold=_num_sold
+            )
             db.session.add(merch_sold)
         # otherwise, update the value
         else:
@@ -312,12 +318,6 @@ def merch_event(event_id):
 
         db.session.commit()
         info = "Updated"
-
-    # for item in event.merch_list:
-    #     print(item.description)
-    #     print(item.merch_sold_list)
-    #     for i in item.merch_sold_list:
-    #         print(i.items_sold)
 
     return render_template("merchevent.html",
                            error=error,
