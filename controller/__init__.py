@@ -3,6 +3,7 @@
 # note that the Flask imports are in orm.py
 from model.orm import *
 from flask import render_template, request, flash, redirect, url_for
+from datetime import date, datetime
 
 # tell flask about our folder setup
 base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))  # ../
@@ -18,9 +19,6 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 """
 ROUTES
 """
-
-
-
 
 
 @app.route("/")
@@ -198,9 +196,29 @@ def delete_merch(merch_id):
     # TODO pass some feedback
 
 
-@app.route("/events")
+@app.route("/events", methods=["POST", "GET"])
 def event_list():
+    """
+
+    :return:
+    """
+    error = None
+    info = None
+
+    if request.method == "POST":
+        try:
+            event = Event(venue_name=request.form["venue_name"],
+                          city=request.form["city"],
+                          state=request.form["state"],
+                          country=request.form["country"],
+                          date=(request.form["date"]))
+            db.session.add(event)
+            db.session.commit()
+        except KeyError:
+            error = "Key error!" + str(request)
+
     all_events = Event.query.all()
+
     return render_template("events.html", all_events=all_events)
 
 

@@ -4,18 +4,18 @@ from model.orm import db
 db.create_all()
 ~~~~
 
+Python
 
-Flask
-http://flask.pocoo.org/docs/0.12/
+SQLite
 
-Flask-SQLAlchemy
-http://flask-sqlalchemy.pocoo.org/2.1/
+[Flask](http://flask.pocoo.org/docs/0.12/)
 
-Jinja2
-http://jinja.pocoo.org/docs/2.9/
+[Flask-SQLAlchemy](http://flask-sqlalchemy.pocoo.org/2.1/)
 
-SQLAlchemy
-http://docs.sqlalchemy.org/en/latest/index.html
+[Jinja2](http://jinja.pocoo.org/docs/2.9/)
 
-Bootstrap
-http://getbootstrap.com/getting-started/
+[SQLAlchemy](http://docs.sqlalchemy.org/en/latest/index.html)
+
+[Bootstrap](http://getbootstrap.com/getting-started/)
+
+[bootstrap-datepicker](https://github.com/uxsolutions/bootstrap-datepicker)

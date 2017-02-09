@@ -11,8 +11,27 @@
         <div class="form-group">
             <label for="venueInput">Venue name</label>
             <input type="text" class="form-control" id="styleInput"
-
+                   name="venue_name" placeholder="name of venue">
         </div>
+        <div class="form-group">
+            <label for="cityInput">City</label>
+            <input class="form-control" id="cityInput" name="city">
+        </div>
+        <div class="form-group">
+            <label for="stateInput">State</label>
+            <input class="form-control" id="stateInput" name="state">
+        </div>
+        <div class="form-group">
+            <label for="countryInput">Country</label>
+            <input class="form-control" id="countryInput" name="country">
+        </div>
+        <div class="form-group">
+            <label for="dateInput">Date</label>
+            <input class="form-control" id="dateInput" name="date"
+                   type="date" min="2017-01-01">
+            <!--TODO validate input -->
+        </div>
+        <button type="submit" class="btn btn-default">Add</button>
     </form>
     <div class="table-responsive">
         <h2>Events</h2>
