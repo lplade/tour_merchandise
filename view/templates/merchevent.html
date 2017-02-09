@@ -21,13 +21,13 @@
                     <th># to sell</th>
                     <!-- <th>type</th> -->
                 </tr>
-                {% for item in merch_sold_list %}
+                {% for item in event.merch_list %}
                     <tr>
                         <td>{{ item.merch_id }}</td>
                         <td>{{ item.description }}</td>
                         <td>{{ "$%5.2f"|format(item.price) }}</td>
                         <td>{{ item.inventory }}</td>
-                        <td>{{ item.items_sold }}</td>
+                        <td>{{ item.merch_sold_list[0].items_sold }}</td>
                         <td>
                             <form class="form form-inline" action="#" method="post">
                                 <input type="number" class="form-control" id="inputSold{{ item.merch_id }}"

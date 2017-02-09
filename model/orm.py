@@ -27,6 +27,10 @@ class Merch(db.Model):
     price = db.Column(db.Float)
     inventory = db.Column(db.Integer)
     type = db.Column(db.String(12))
+
+    event_list = db.relationship("Event", secondary="merch_sold", viewonly=True)
+    # merch_sold_list <- backref
+
     # this is the discriminator field, and should be one of
     # * 'tshirt'
     # * 'album'
@@ -40,6 +44,7 @@ class Merch(db.Model):
     def __init__(self, price, inventory):
         self.price = price
         self.inventory = inventory
+        self.event_list = []
 
 
 # subclass of Merch
@@ -61,6 +66,7 @@ class TShirt(Merch):
         super().__init__(price, inventory)
         self.style = style
         self.size = size  # TODO integrity constraint
+        self.event_list = []
 
     def generate_description(self):
         return "{} t-shirt, {}".format(self.style, self.size)
@@ -84,6 +90,7 @@ class Album(Merch):
         super().__init__(price, inventory)
         self.title = title
         self.rec_format = rec_format  # TODO integrity constraint
+        self.event_list = []
 
     def generate_description(self):
         return "{}, on {}".format(self.title, self.rec_format)
@@ -97,6 +104,9 @@ class Event(db.Model):
     state = db.Column(db.String(12))  # longer for non-US
     country = db.Column(db.String(80))
     event_date = db.Column(db.Date)
+    # merch_sold_list <- backref
+
+    merch_list = db.relationship("Merch", secondary="merch_sold", viewonly=True)
 
     def __init__(self, venue_name, city, state, country, date_string):
         self.venue_name = venue_name
@@ -105,6 +115,7 @@ class Event(db.Model):
         self.country = country
         # Convert a string to datetime.date object
         self.event_date = self.string_to_date(date_string)
+        self.merch_list = []
 
     @staticmethod
     def string_to_date(date_string):
@@ -137,15 +148,26 @@ class MerchSold(db.Model):
                          primary_key=True)
     items_sold = db.Column(db.Integer)
 
+    # https://gist.github.com/SuryaSankar/10091097
+    merch = db.relationship("Merch", backref=db.backref("merch_sold_list", cascade="all, delete-orphan"))
+    event = db.relationship("Event", backref=db.backref("merch_sold_list", cascade="all, delete-orphan"))
 
-# use this object to store event-merch view
-# this class doesn't get stored in the database, derived from other classes
-class MerchSoldView:
-
-    def __init__(self, merch_id, event_id, items_sold, description, price, inventory):
-        self.merch_id = merch_id
-        self.event_id = event_id
+    def __init__(self, merch, event, items_sold=0):
+        self.merch = merch
+        self.event = event
         self.items_sold = items_sold
-        self.description = description
-        self.price = price
-        self.inventory = inventory
+
+    def sell_merch(self, quantity):
+        """
+        Moves items from inventory into items_sold
+        Be sure to check if this instance exists before calling
+        :param quantity:
+        :return: False if problems, True if OK
+        """
+        if quantity > self.merch.inventory:
+            return False
+        else:
+            self.items_sold += quantity
+            self.merch.inventory -= quantity
+            return True
+
