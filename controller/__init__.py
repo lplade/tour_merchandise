@@ -222,7 +222,7 @@ def event_list():
                           city=request.form["city"],
                           state=request.form["state"],
                           country=request.form["country"],
-                          event_date=request.form["event_date"]
+                          date_string=request.form["event_date"]
                           )
             db.session.add(event)
             db.session.commit()
