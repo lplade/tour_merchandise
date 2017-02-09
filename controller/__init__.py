@@ -322,6 +322,7 @@ def merch_event(event_id):
     return render_template("merchevent.html",
                            error=error,
                            info=info,
+                           all_merch=all_merch,
                            event=event)
 
 

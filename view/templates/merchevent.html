@@ -21,7 +21,7 @@
                     <th># to sell</th>
                     <!-- <th>type</th> -->
                 </tr>
-                {% for item in event.merch_list %}
+                {% for item in all_merch %}
                     <tr>
                         <td>{{ item.merch_id }}</td>
                         <td>{{ item.description }}</td>
@@ -29,7 +29,7 @@
                         <td>{{ item.inventory }}</td>
                         <td>
                             {% for relationship in item.merch_sold_list %}
-                                {% if relationship.merch_id == item.merch_id %}
+                                {% if relationship.event_id == event.event_id %}
                                     {{ relationship.items_sold }}
                                 {% endif %}
                             {% endfor %}
