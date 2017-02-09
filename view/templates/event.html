@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Tour Merchandise{% endblock %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="/">Main</a></li>
+        <li><a href="/events">Events</a></li>
+        <li class="active">Details</li>
+    </ol>
+    <h1>Tour Merchandise</h1>
+    <a href="/merchevent/{{ event.event_id }}">Sell some merchandise at this event</a>
+    <h2>Event details</h2>
+        <form class="form" action="#" method="post">
+            <div class="form-group">
+                <label for="venueInput">Venue name</label>
+                <input type="text" class="form-control" id="styleInput"
+                       name="venue_name" placeholder="name of venue" value="{{ event.venue_name }}">
+            </div>
+            <div class="form-group">
+                <label for="cityInput">City</label>
+                <input class="form-control" id="cityInput" name="city" value="{{ event.city }}">
+            </div>
+            <div class="form-group">
+                <label for="stateInput">State</label>
+                <input class="form-control" id="stateInput" name="state" value="{{ event.state }}">
+            </div>
+            <div class="form-group">
+                <label for="countryInput">Country</label>
+                <input class="form-control" id="countryInput" name="country" value="{{ event.country }}">
+            </div>
+            <div class="form-group">
+                <label for="dateInput">Date</label>
+                <div class="input-group date" data-provide="datepicker">
+                    <input class="form-control" id="dateInput" name="event_date" type="text"
+                           value="{{ event.event_date.strftime('%Y-%m-%d') }}">
+                    <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-th"></i>
+                    </span>
+                </div>
+                <!--TODO validate input -->
+            </div>
+            <button type="submit" class="btn btn-default">Update</button>
+        </form>
+
+        <a href="/delete_event/{{ event.event_id }}" class="btn btn-default">Delete this event</a>
+    {% block custom_js %}
+        <script>
+            // options for bootstrap-datepicker component
+            $('.input-group.date').datepicker({
+                format: "yyyy-mm-dd",
+                maxViewMode: 2,
+                todayBtn: "linked",
+                orientation: "bottom auto",
+                daysOfWeekHighlighted: "0,6",
+                autoclose: true,
+                todayHighlight: true
+            });
+
+        </script>
+    {% endblock %}
+
+{% endblock %}

@@ -104,7 +104,25 @@ class Event(db.Model):
         self.state = state
         self.country = country
         # Convert a string to datetime.date object
-        self.event_date = datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+        self.event_date = self.string_to_date(date_string)
+
+    @staticmethod
+    def string_to_date(date_string):
+        """
+        Converts a sting in YYYY-MM-DD format to a datetime.date object
+        :param date_string:
+        :return:
+        """
+        return datetime.datetime.strptime(date_string, "%Y-%m-%d").date()
+
+    @staticmethod
+    def date_to_string(_date):
+        """
+        Converts a datetime.date object to a YYYY-MM-DD string
+        :param _date:
+        :return:
+        """
+        return _date.strftime("%Y-%m-%d")
 
 
 # list of items sold per event

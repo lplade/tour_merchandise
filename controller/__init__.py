@@ -234,6 +234,74 @@ def event_list():
     return render_template("events.html", all_events=all_events, error=error, info=info)
 
 
+@app.route("/event/<int:event_id>", methods=["POST", "GET"])
+def event_properties(event_id):
+    error = None
+    info = None
+
+    event = Event.query.get(event_id)
+    if event is None:
+        return render_template("enotfound.html",
+                               event_id=event_id)
+    elif request.method == "POST":
+        try:
+            # Update the stored object with new value from form
+            event.venue_name = request.form["venue_name"]
+            event.city = request.form["city"]
+            event.state = request.form["state"]
+            event.country = request.form["country"]
+            print(request.form["event_date"])
+            event.event_date = event.string_to_date(request.form["event_date"])
+
+            db.session.commit()
+            info = "Record updated"
+
+        except KeyError:
+            error = "Key error! " + str(request)
+
+    # Regardless of whether GET or returning from POST, display details
+
+    return render_template("event.html",
+                           event=event,
+                           error=error,
+                           info=info)
+
+
+@app.route("/delete_event/<int:event_id>", methods=["GET"])
+def delete_event(event_id):
+    error = None
+    info = None
+
+    event = Event.query.get(event_id)
+    db.session.delete(event)
+    db.session.commit()
+
+    return redirect("/events", code=303)
+    # TODO pass some feedback
+
+
+@app.route("/merchevent/<int:event_id>", methods=["POST", "GET"])
+def merch_event(event_id):
+
+    error = None
+    info = None
+
+    all_merch = Merch.query.all()
+    event = Event.query.get(event_id)
+    if event is None:
+        return render_template("enotfound.html",
+                               event_id=event_id)
+    elif request.method == "POST":
+        pass
+
+    return render_template("merchevent.html",
+                           all_merch=all_merch,
+                           event=event,
+                           error=error,
+                           info=info)
+
+
+
 @app.route("/<path:path>")
 def serve_static(path):
     """
